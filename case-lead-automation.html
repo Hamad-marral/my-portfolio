@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Case study: AI Lead Automation System by Muhammad Hamad Khaliq." />
+  <title>AI Lead Automation System | Muhammad Hamad Khaliq</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/style.css" />
+</head>
+<body>
+
+  <header>
+    <div class="container nav">
+      <a href="index.html" class="logo"><img class="logo-img" src="assets/hamad.jpeg" alt="Muhammad Hamad Khaliq" />Muhammad Hamad Khaliq</a>
+      <ul class="nav-links" id="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="skills.html">Skills</a></li>
+        <li><a href="projects.html" class="active">Projects</a></li>
+        <li><a href="services.html">Services</a></li>
+        <li><a href="experience.html">Experience</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+      <div class="nav-cta">
+        <a href="contact.html" class="btn btn-sm">Let's Talk &rarr;</a>
+        <button class="menu-btn" id="menu-btn" aria-label="Toggle menu" aria-expanded="false">&#9776;</button>
+      </div>
+    </div>
+  </header>
+
+  <section class="page-top">
+    <div class="container">
+      <a href="projects.html" class="link-more reveal">&larr; Back to Projects</a>
+
+      <div class="reveal" style="margin-top:24px;">
+        <span class="tag">Case Study</span>
+        <h1 class="section-title">AI Lead Automation System</h1>
+        <p class="section-sub">An automated lead-processing workflow that captures leads, qualifies them with AI, pushes them to the CRM and sends personalized follow-ups.</p>
+      </div>
+
+      <div class="flow reveal" style="margin:40px 0;">
+        <div class="step-box"><div class="icon">&#9776;</div>Website Lead</div>
+        <span class="arrow">&rarr;</span>
+        <div class="step-box"><div class="icon">&#129302;</div>AI Qualification</div>
+        <span class="arrow">&rarr;</span>
+        <div class="step-box"><div class="icon">&#128101;</div>CRM</div>
+        <span class="arrow">&rarr;</span>
+        <div class="step-box"><div class="icon">&#9993;</div>Email</div>
+      </div>
+
+      <div class="metrics reveal" style="margin-bottom:44px;">
+        <div><strong>70%</strong><span>Less manual work</span></div>
+        <div><strong>24/7</strong><span>Processing</span></div>
+        <div><strong>5+</strong><span>Tools integrated</span></div>
+      </div>
+
+      <div class="grid-3">
+        <div class="card reveal"><h3>The Challenge</h3><p>Leads came in from forms and chats but were copied into the CRM by hand, so follow-ups were slow and some leads were lost.</p></div>
+        <div class="card reveal"><h3>The Solution</h3><p>An n8n workflow captures each lead, an OpenAI model scores and classifies it, the lead is saved to the CRM, and a personalized email is sent automatically.</p></div>
+        <div class="card reveal"><h3>The Result</h3><p>Manual data entry dropped by about 70%, and every lead now gets a response within minutes, at any hour.</p></div>
+      </div>
+
+      <div class="tags reveal" style="margin-top:36px;"><span>n8n</span><span>OpenAI</span><span>Python</span><span>PostgreSQL</span></div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container footer-inner">
+      <a href="index.html" class="logo"><img class="logo-img" src="assets/hamad.jpeg" alt="Muhammad Hamad Khaliq" />Muhammad Hamad Khaliq</a>
+      <ul class="footer-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="skills.html">Skills</a></li>
+        <li><a href="projects.html">Projects</a></li>
+        <li><a href="services.html">Services</a></li>
+        <li><a href="experience.html">Experience</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+      <p class="copy">&copy; <span id="year"></span> Muhammad Hamad Khaliq. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="assets/main.js"></script>
+</body>
+</html>
