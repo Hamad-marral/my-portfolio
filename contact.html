@@ -24,7 +24,7 @@
         <li><a href="contact.html" class="active">Contact</a></li>
       </ul>
       <div class="nav-cta">
-        <a href="contact.html" class="btn btn-sm">Let's Talk &rarr;</a>
+        <a href="contact.html#message" class="btn btn-sm">Let's Talk &rarr;</a>
         <button class="menu-btn" id="menu-btn" aria-label="Toggle menu" aria-expanded="false">&#9776;</button>
       </div>
     </div>
@@ -38,20 +38,38 @@
         <p>Feel free to reach out for collaboration, projects or just a friendly hello.</p>
         <div class="social">
           <a href="https://wa.me/923048876526" target="_blank" rel="noopener"><i>WA</i>WhatsApp</a>
-          <a href="https://www.linkedin.com/in/Muhammad Hamad Khaliq-marral" target="_blank" rel="noopener"><i>in</i>LinkedIn</a>
-          <a href="https://www.instagram.com/Muhammad Hamad Khaliq_marral" target="_blank" rel="noopener"><i>IG</i>Instagram</a>
-          <a href="https://www.facebook.com/Muhammad Hamad Khaliqmarral.fb" target="_blank" rel="noopener"><i>f</i>Facebook</a>
-          <a href="https://twitter.com/Muhammad Hamad Khaliq_marral" target="_blank" rel="noopener"><i>X</i>Twitter / X</a>
-          <a href="mailto:hammadkhanmarral@gmail.com"><i>@</i>Email</a>
+          <a href="https://www.linkedin.com/in/hamad-marral" target="_blank" rel="noopener"><i>in</i>LinkedIn</a>
+          <a href="https://www.instagram.com/hamad_marral" target="_blank" rel="noopener"><i>IG</i>Instagram</a>
+          <a href="https://www.facebook.com/hamadmarral.fb" target="_blank" rel="noopener"><i>f</i>Facebook</a>
+          <a href="https://twitter.com/hamad_marral" target="_blank" rel="noopener"><i>X</i>Twitter / X</a>
+          <a href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=hammadkhanmarral@gmail.com" target="_blank" rel="noopener"><i>@</i>Email</a>
         </div>
-        <a href="mailto:hammadkhanmarral@gmail.com" class="btn btn-sm">Contact Me &rarr;</a>
+        <a href="#message" class="btn btn-sm">Contact Me &rarr;</a>
+
+        <form class="contact-form" id="contact-form" action="https://formsubmit.co/ajax/hammadkhanmarral@gmail.com" method="POST">
+          <h3 id="message">Drop a Message</h3>
+          <input type="hidden" name="_subject" value="New message from portfolio" />
+          <input type="hidden" name="_template" value="table" />
+          <input type="text" name="_honey" class="hp" tabindex="-1" autocomplete="off" />
+          <div class="form-row">
+            <label>Name<input type="text" name="name" required placeholder="Your name" /></label>
+            <label>Email<input type="email" name="email" required placeholder="you@example.com" /></label>
+          </div>
+          <label>Message<textarea name="message" rows="5" required placeholder="Tell me about your project..."></textarea></label>
+          <button type="submit" class="btn btn-primary btn-sm">Send Message &rarr;</button>
+          <p class="form-status" id="form-status" role="status"></p>
+          <div class="form-fallback" id="form-fallback" hidden>
+            <a href="#" class="btn btn-sm" id="fallback-gmail" target="_blank" rel="noopener">Send via Gmail &rarr;</a>
+            <a href="#" class="btn btn-sm" id="fallback-wa" target="_blank" rel="noopener">Send on WhatsApp &rarr;</a>
+          </div>
+        </form>
 
         <div class="cta">
           <div>
             <h3>Have a repetitive process?<br />Let's automate it.</h3>
             <p>Turn your ideas into intelligent automation systems.</p>
           </div>
-          <a href="mailto:hammadkhanmarral@gmail.com" class="btn btn-primary btn-sm">Start a Project &rarr;</a>
+          <a href="#message" class="btn btn-primary btn-sm" data-prefill="Hi Hamad, I'd like to start a project. Here's what I need automated: ">Start a Project &rarr;</a>
         </div>
       </div>
     </div>
