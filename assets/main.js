@@ -50,84 +50,117 @@ document.querySelectorAll(".grid-3, .grid-6, .projects, .process").forEach(group
   });
 });
 
-// Contact form (sent via FormSubmit)
-const contactForm = document.getElementById("contact-form");
-if (contactForm) {
-  const status = document.getElementById("form-status");
-  const submitBtn = contactForm.querySelector("button[type=submit]");
-  const fallback = document.getElementById("form-fallback");
-  const nameInput = contactForm.elements.name;
-  const messageInput = contactForm.elements.message;
+// "Let's Talk" message popup (sent via FormSubmit)
+const talkModal = document.createElement("div");
+talkModal.className = "talk-modal";
+talkModal.hidden = true;
+talkModal.innerHTML = `
+  <div class="talk-backdrop" data-close></div>
+  <div class="talk-dialog" role="dialog" aria-modal="true" aria-labelledby="talk-title">
+    <button type="button" class="talk-close" aria-label="Close" data-close>&times;</button>
+    <form class="contact-form" id="contact-form" action="https://formsubmit.co/ajax/hammadkhanmarral@gmail.com" method="POST">
+      <h3 id="talk-title">Let's Talk</h3>
+      <p class="talk-sub">Drop a message and I'll get back to you by email.</p>
+      <input type="hidden" name="_subject" value="New message from portfolio" />
+      <input type="hidden" name="_template" value="table" />
+      <input type="text" name="_honey" class="hp" tabindex="-1" autocomplete="off" />
+      <div class="form-row">
+        <label>Name<input type="text" name="name" required placeholder="Your name" /></label>
+        <label>Email<input type="email" name="email" required placeholder="you@example.com" /></label>
+      </div>
+      <label>Message<textarea name="message" rows="5" required placeholder="Tell me about your project..."></textarea></label>
+      <button type="submit" class="btn btn-primary btn-sm">Send Message &rarr;</button>
+      <p class="form-status" role="status"></p>
+      <div class="form-fallback" hidden>
+        <a href="#" class="btn btn-sm" data-fallback="gmail" target="_blank" rel="noopener">Send via Gmail &rarr;</a>
+        <a href="#" class="btn btn-sm" data-fallback="wa" target="_blank" rel="noopener">Send on WhatsApp &rarr;</a>
+      </div>
+    </form>
+  </div>`;
+document.body.appendChild(talkModal);
 
-  const focusForm = (prefill) => {
-    if (prefill && !messageInput.value.trim()) messageInput.value = prefill;
-    contactForm.scrollIntoView({ behavior: "smooth", block: "start" });
-    setTimeout(() => (prefill ? messageInput : nameInput).focus({ preventScroll: true }), 400);
-  };
+const contactForm = talkModal.querySelector("form");
+const formStatus = contactForm.querySelector(".form-status");
+const formFallback = contactForm.querySelector(".form-fallback");
+const submitBtn = contactForm.querySelector("button[type=submit]");
+let lastTrigger = null;
 
-  // Prefill from services page links, e.g. contact.html?service=AI%20Agents#message
-  const service = new URLSearchParams(location.search).get("service");
-  if (service) messageInput.value = `Hi Hamad, I'm interested in your "${service}" service. `;
-  if (location.hash === "#message") focusForm();
+const openTalk = (prefill) => {
+  const msg = contactForm.elements.message;
+  if (prefill && !msg.value.trim()) msg.value = prefill;
+  talkModal.hidden = false;
+  document.body.classList.add("modal-open");
+  setTimeout(() => (prefill ? msg : contactForm.elements.name).focus(), 50);
+};
+const closeTalk = () => {
+  talkModal.hidden = true;
+  document.body.classList.remove("modal-open");
+  if (location.hash === "#message") history.replaceState(null, "", location.pathname + location.search);
+  if (lastTrigger) lastTrigger.focus();
+};
 
-  // Same-page links (Contact Me, Start a Project, Let's Talk) jump to the form
-  document.querySelectorAll('a[href="#message"], a[href="contact.html#message"]').forEach(link => {
-    link.addEventListener("click", e => {
-      e.preventDefault();
-      history.replaceState(null, "", "#message");
-      focusForm(link.dataset.prefill);
+talkModal.addEventListener("click", e => { if (e.target.closest("[data-close]")) closeTalk(); });
+document.addEventListener("keydown", e => { if (e.key === "Escape" && !talkModal.hidden) closeTalk(); });
+
+// Any link ending in #message opens the popup (Let's Talk, Contact Me, Start a Project, Get This Service)
+document.addEventListener("click", e => {
+  const link = e.target.closest('a[href$="#message"]');
+  if (!link) return;
+  e.preventDefault();
+  lastTrigger = link;
+  const service = new URL(link.href).searchParams.get("service");
+  openTalk(service ? `Hi Hamad, I'm interested in your "${service}" service. ` : link.dataset.prefill);
+});
+if (location.hash === "#message") openTalk();
+
+// Gmail / WhatsApp links carrying the typed message, offered if sending fails
+const showFallback = () => {
+  const { name, email, message } = contactForm.elements;
+  const text = `${message.value}\n\n— ${name.value} (${email.value})`;
+  formFallback.querySelector('[data-fallback="gmail"]').href =
+    "https://mail.google.com/mail/?view=cm&fs=1&to=hammadkhanmarral@gmail.com" +
+    "&su=" + encodeURIComponent("Portfolio message from " + name.value) +
+    "&body=" + encodeURIComponent(text);
+  formFallback.querySelector('[data-fallback="wa"]').href =
+    "https://wa.me/923048876526?text=" + encodeURIComponent(text);
+  formFallback.hidden = false;
+};
+
+contactForm.addEventListener("submit", async e => {
+  e.preventDefault();
+  formFallback.hidden = true;
+  formStatus.className = "form-status";
+
+  if (location.protocol === "file:") {
+    formStatus.classList.add("err");
+    formStatus.textContent = "The form only works on the live website, not when the file is opened directly. You can send it below instead:";
+    showFallback();
+    return;
+  }
+
+  submitBtn.disabled = true;
+  formStatus.textContent = "Sending...";
+  try {
+    const res = await fetch(contactForm.action, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Accept: "application/json" },
+      body: JSON.stringify(Object.fromEntries(new FormData(contactForm)))
     });
-  });
-
-  // Gmail / WhatsApp links carrying the typed message, offered if sending fails
-  const showFallback = () => {
-    const { name, email, message } = contactForm.elements;
-    const text = `${message.value}\n\n— ${name.value} (${email.value})`;
-    document.getElementById("fallback-gmail").href =
-      "https://mail.google.com/mail/?view=cm&fs=1&to=hammadkhanmarral@gmail.com" +
-      "&su=" + encodeURIComponent("Portfolio message from " + name.value) +
-      "&body=" + encodeURIComponent(text);
-    document.getElementById("fallback-wa").href =
-      "https://wa.me/923048876526?text=" + encodeURIComponent(text);
-    fallback.hidden = false;
-  };
-
-  contactForm.addEventListener("submit", async e => {
-    e.preventDefault();
-    fallback.hidden = true;
-    status.className = "form-status";
-
-    if (location.protocol === "file:") {
-      status.classList.add("err");
-      status.textContent = "The form only works on the live website, not when the file is opened directly. You can send it below instead:";
-      showFallback();
-      return;
-    }
-
-    submitBtn.disabled = true;
-    status.textContent = "Sending...";
-    try {
-      const res = await fetch(contactForm.action, {
-        method: "POST",
-        headers: { "Content-Type": "application/json", Accept: "application/json" },
-        body: JSON.stringify(Object.fromEntries(new FormData(contactForm)))
-      });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok || String(data.success) !== "true") throw new Error(data.message || `HTTP ${res.status}`);
-      contactForm.reset();
-      status.classList.add("ok");
-      status.textContent = "Thanks! Your message has been sent. I'll get back to you soon.";
-    } catch (err) {
-      status.classList.add("err");
-      status.textContent = /activat/i.test(err.message)
-        ? "This form is waiting for activation. Meanwhile, you can send your message below:"
-        : "Couldn't send right now. You can send your message below instead:";
-      showFallback();
-    } finally {
-      submitBtn.disabled = false;
-    }
-  });
-}
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok || String(data.success) !== "true") throw new Error(data.message || `HTTP ${res.status}`);
+    contactForm.reset();
+    formStatus.classList.add("ok");
+    formStatus.textContent = "Thanks! Your message has been sent. I'll get back to you soon.";
+  } catch (err) {
+    formStatus.classList.add("err");
+    formStatus.textContent = /activat/i.test(err.message)
+      ? "This form is waiting for activation. Meanwhile, you can send your message below:"
+      : "Couldn't send right now. You can send your message below instead:";
+    showFallback();
+  } finally {
+    submitBtn.disabled = false;
+  }
+});
 
 // Footer year
 const year = document.getElementById("year");
